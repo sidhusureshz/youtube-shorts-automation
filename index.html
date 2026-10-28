@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic AI YouTube Content Automation Studio</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: rgba(18, 24, 38, 0.85);
+      --bg-card-hover: rgba(26, 35, 54, 0.95);
+      --bg-glass: rgba(15, 23, 42, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(59, 130, 246, 0.35);
+      --border-glow: rgba(16, 185, 129, 0.4);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      
+      --accent-primary: #10b981; /* Emerald green */
+      --accent-secondary: #6366f1; /* Indigo */
+      --accent-purple: #8b5cf6; /* Purple AI */
+      --accent-cyan: #06b6d4; /* Tech cyan */
+      --accent-warning: #f59e0b; /* Amber retry */
+      --accent-danger: #ef4444; /* Red error */
+      
+      --glow-emerald: 0 0 25px rgba(16, 185, 129, 0.25);
+      --glow-purple: 0 0 25px rgba(139, 92, 246, 0.25);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 25%, rgba(139, 92, 246, 0.1) 0%, transparent 35%),
+        radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 13, 22, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: var(--glow-purple);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Nav Switcher */
+    .view-switcher {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      gap: 4px;
+    }
+
+    .nav-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-tab-btn.active {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.25));
+      color: #ffffff;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .active-niche-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      transition: all 0.3s ease;
+    }
+
+    .active-niche-badge.active {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: var(--accent-primary);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: all 0.3s ease;
+    }
+
+    .active-niche-badge.active .pulse-dot {
+      background: var(--accent-primary);
+      box-shadow: 0 0 10px var(--accent-primary);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.25); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    .app-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* NICHE INPUT SETUP CARD */
+    .niche-setup-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+
+    .niche-setup-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan), var(--accent-primary));
+    }
+
+    .niche-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .niche-title-box h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .niche-title-box p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .niche-input-group {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 1fr 1fr auto;
+      gap: 14px;
+      align-items: flex-end;
+    }
+
+    .input-field-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-field-wrapper label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .custom-input {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .custom-input:focus {
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    }
+
+    .select-input {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+    }
+
+    .niche-presets-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .preset-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .preset-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-chip:hover {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: rgba(139, 92, 246, 0.4);
+      color: white;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-secondary));
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--glow-purple);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* PIPELINE PROGRESS BAR */
+    .pipeline-tracker-bar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+
+    .pipeline-stage-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 8px;
+      border-radius: var(--radius-md);
+      transition: all 0.3s;
+    }
+
+    .pipeline-stage-step.active {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .pipeline-stage-step.completed {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .step-icon-circle {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+
+    .pipeline-stage-step.completed .step-icon-circle {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .pipeline-stage-step.active .step-icon-circle {
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-secondary));
+      border-color: transparent;
+      color: white;
+      box-shadow: var(--glow-purple);
+    }
+
+    .step-name { font-size: 12px; font-weight: 700; margin-bottom: 2px; color: var(--text-primary); }
+    .step-status-tag { font-size: 10px; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; }
+
+    .pipeline-stage-step.completed .step-status-tag { color: var(--accent-primary); }
+    .pipeline-stage-step.active .step-status-tag { color: var(--accent-purple); font-weight: 700; }
+
+    /* STUDIO WORKSPACE GRID */
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .studio-grid { grid-template-columns: 1fr; }
+    }
+
+    .cards-stack { display: flex; flex-direction: column; gap: 20px; }
+
+    .artifact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+
+    .artifact-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-title-group { display: flex; align-items: center; gap: 10px; }
+    .card-title-group h3 { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+
+    /* Topic Display */
+    .topic-display-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .topic-title { font-size: 16px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; font-style: italic; }
+    .topic-title.has-content { color: #ffffff; font-style: normal; }
+    .topic-meta-row { display: flex; gap: 16px; font-size: 12px; color: var(--text-secondary); font-family: var(--font-mono); }
+
+    .justification-quote {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 3px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      transition: all 0.3s ease;
+    }
+
+    .justification-quote.has-content {
+      color: var(--text-secondary);
+      background: rgba(139, 92, 246, 0.05);
+      border-left-color: var(--accent-purple);
+    }
+
+    /* Script Display */
+    .script-content-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.7;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .script-content-box.has-content {
+      color: #e2e8f0;
+      font-style: normal;
+    }
+
+    .script-metrics-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .metric-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    /* Empty state box */
+    .empty-placeholder-box {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 36px 20px;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Scene Grid */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) { .scene-grid { grid-template-columns: 1fr; } }
+
+    .scene-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scene-img-thumb { height: 130px; width: 100%; object-fit: cover; background: #1e293b; }
+
+    .scene-number-badge {
+      position: absolute; top: 8px; left: 8px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      padding: 2px 8px; border-radius: 4px;
+      font-family: var(--font-mono); font-size: 10px; color: #fff; font-weight: 700;
+    }
+
+    .scene-details { padding: 10px; font-size: 12px; }
+    .scene-prompt {
+      color: var(--text-secondary); font-size: 11px; line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    /* Right Preview */
+    .preview-panel {
+      position: sticky; top: 90px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .video-mockup-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .shorts-viewport {
+      width: 240px; height: 426px;
+      background: #0f172a; border-radius: 18px;
+      border: 3px solid #1e293b;
+      position: relative; overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+
+    .shorts-bg-image {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.85); transition: all 0.5s ease;
+      display: none;
+    }
+
+    .shorts-bg-image.has-content { display: block; }
+
+    .shorts-empty-state {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px; color: var(--text-muted); text-align: center; padding: 20px;
+    }
+
+    .shorts-empty-state i { width: 36px; height: 36px; opacity: 0.4; }
+
+    .shorts-overlay-content {
+      position: relative; z-index: 2; padding: 14px;
+      display: flex; flex-direction: column; height: 100%; justify-content: space-between;
+    }
+
+    .live-badge {
+      background: rgba(255, 255, 255, 0.1); color: var(--text-muted);
+      font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px;
+      font-family: var(--font-mono); text-transform: uppercase;
+      border: 1px solid var(--border-color);
+    }
+
+    .live-badge.rendered {
+      background: rgba(239, 68, 68, 0.85); color: white; border: none;
+    }
+
+    .shorts-caption-center {
+      text-align: center; padding: 10px 6px;
+      background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px);
+      border-radius: 8px; margin: auto 0 40px 0;
+    }
+
+    .burned-caption-text {
+      color: var(--text-muted); font-weight: 800; font-size: 12px; text-transform: uppercase;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.9); font-style: italic;
+    }
+
+    .burned-caption-text.has-content {
+      color: #facc15; font-size: 14px; font-style: normal;
+    }
+
+    /* TELEMETRY OPERATOR VIEW */
+    .operator-metrics-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;
+    }
+
+    .telemetry-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 18px;
+    }
+
+    .telemetry-label {
+      font-size: 12px; font-family: var(--font-mono); color: var(--text-muted);
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+
+    .telemetry-value { font-size: 26px; font-weight: 800; color: var(--text-primary); }
+    .telemetry-value.accent { color: var(--accent-primary); }
+    .telemetry-value.purple { color: var(--accent-purple); }
+    .telemetry-value.amber { color: var(--accent-warning); }
+
+    .telemetry-subtext { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+    .log-table-container {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+
+    .log-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    .log-table th {
+      background: rgba(15, 23, 42, 0.9); padding: 14px 18px;
+      font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+      text-transform: uppercase; border-bottom: 1px solid var(--border-color);
+    }
+
+    .log-table td { padding: 14px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-secondary); }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+      border-radius: 20px; font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    }
+
+    .status-badge.pending {
+      background: rgba(255, 255, 255, 0.04); color: var(--text-muted); border: 1px solid var(--border-color);
+    }
+
+    .status-badge.success {
+      background: rgba(16, 185, 129, 0.15); color: var(--accent-primary); border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-badge.warning {
+      background: rgba(245, 158, 11, 0.15); color: var(--accent-warning); border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    /* ======================================================
+       PREMIUM MOTION + VISUAL POLISH
+       ------------------------------------------------------
+       These enhancements intentionally stay CSS/SVG-only so
+       the file remains portable and dependency-free.
+    ====================================================== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.22;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+
+    header {
+      isolation: isolate;
+      overflow: hidden;
+      min-height: 74px;
+    }
+
+    header::before,
+    header::after {
+      content: '';
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: 0.6;
+    }
+
+    header::before {
+      width: 260px;
+      height: 260px;
+      left: 11%;
+      top: -220px;
+      border: 1px solid rgba(139, 92, 246, 0.32);
+      box-shadow: 0 0 0 18px rgba(139, 92, 246, 0.04), 0 0 0 38px rgba(6, 182, 212, 0.03);
+      animation: orbitDrift 12s ease-in-out infinite;
+    }
+
+    header::after {
+      width: 8px;
+      height: 8px;
+      left: 25%;
+      top: 18px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 20px 4px rgba(6, 182, 212, 0.5);
+      animation: signalFloat 5s ease-in-out infinite;
+    }
+
+    header > * { position: relative; z-index: 1; }
+
+    @keyframes orbitDrift {
+      0%, 100% { transform: translateX(-12px) rotate(0deg); }
+      50% { transform: translateX(22px) rotate(8deg); }
+    }
+
+    @keyframes signalFloat {
+      0%, 100% { transform: translate(0, 0); opacity: 0.35; }
+      50% { transform: translate(80px, 20px); opacity: 1; }
+    }
+
+    .brand-logo {
+      position: relative;
+      overflow: visible;
+      animation: logoBreathe 4s ease-in-out infinite;
+    }
+
+    .brand-logo::before,
+    .brand-logo::after {
+      content: '';
+      position: absolute;
+      inset: -7px;
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    .brand-logo::after {
+      inset: -13px;
+      border-color: rgba(6, 182, 212, 0.12);
+      border-radius: 17px;
+      transform: rotate(45deg);
+      animation: logoOrbit 7s linear infinite;
+    }
+
+    @keyframes logoBreathe {
+      0%, 100% { transform: translateY(0) scale(1); filter: saturate(1); }
+      50% { transform: translateY(-2px) scale(1.03); filter: saturate(1.25); }
+    }
+
+    @keyframes logoOrbit {
+      to { transform: rotate(405deg); }
+    }
+
+    .brand-subtitle::before {
+      content: '●';
+      color: var(--accent-primary);
+      margin-right: 6px;
+      animation: statusBlink 2.2s ease-in-out infinite;
+    }
+
+    @keyframes statusBlink {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 1; text-shadow: 0 0 8px var(--accent-primary); }
+    }
+
+    .active-niche-badge {
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .active-niche-badge.active {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.08), inset 0 0 16px rgba(16, 185, 129, 0.05);
+    }
+
+    .active-niche-badge.active::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      border: 1px solid rgba(16, 185, 129, 0.22);
+      animation: badgeSweep 2.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes badgeSweep {
+      0%, 100% { opacity: 0; transform: scale(0.95); }
+      45%, 65% { opacity: 1; transform: scale(1.02); }
+    }
+
+    .pipeline-tracker-bar {
+      --rail-progress: 0%;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .pipeline-tracker-bar::before,
+    .pipeline-tracker-bar::after {
+      content: '';
+      position: absolute;
+      left: 9%;
+      right: 9%;
+      top: 43px;
+      height: 2px;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .pipeline-tracker-bar::before {
+      display: none;
+    }
+
+    .pipeline-tracker-bar::after {
+      right: auto;
+      width: var(--rail-progress);
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan), var(--accent-primary));
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.65);
+      transition: width 0.65s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .pipeline-stage-step {
+      position: relative;
+      z-index: 1;
+      border: 1px solid transparent;
+    }
+
+    .pipeline-stage-step.active {
+      animation: activeStage 1.8s ease-in-out infinite;
+    }
+
+    .pipeline-stage-step.active .step-icon-circle {
+      position: relative;
+      animation: activeIcon 1.6s ease-in-out infinite;
+    }
+
+    .pipeline-stage-step.active .step-icon-circle::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border: 1px solid rgba(139, 92, 246, 0.5);
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+
+    .pipeline-stage-step.completed .step-icon-circle {
+      animation: completedPop 0.45s ease-out both;
+    }
+
+    @keyframes activeStage {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+
+    @keyframes activeIcon {
+      0%, 100% { box-shadow: 0 0 12px rgba(139, 92, 246, 0.25); }
+      50% { box-shadow: 0 0 26px rgba(139, 92, 246, 0.6); }
+    }
+
+    @keyframes completedPop {
+      0% { transform: scale(0.7); }
+      70% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    .spin {
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .artifact-card,
+    .telemetry-card,
+    .video-mockup-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .artifact-card::after,
+    .telemetry-card::after,
+    .video-mockup-card::after {
+      content: '';
+      position: absolute;
+      left: -30%;
+      top: 0;
+      width: 25%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .artifact-card:hover::after,
+    .telemetry-card:hover::after,
+    .video-mockup-card:hover::after {
+      opacity: 1;
+      animation: cardScan 1.2s ease-out;
+    }
+
+    @keyframes cardScan {
+      from { left: -30%; }
+      to { left: 110%; }
+    }
+
+    .artifact-card.reveal {
+      animation: cardReveal 0.65s cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    @keyframes cardReveal {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .empty-placeholder-box {
+      position: relative;
+      min-height: 180px;
+      border-style: solid;
+      border-color: rgba(139, 92, 246, 0.17);
+      background:
+        radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.12), transparent 42%),
+        rgba(15, 23, 42, 0.42);
+    }
+
+    .empty-placeholder-box svg {
+      color: var(--accent-purple);
+      filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.5));
+      animation: emptyFloat 3s ease-in-out infinite;
+    }
+
+    .empty-placeholder-box .empty-eyebrow {
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @keyframes emptyFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .scene-card {
+      position: relative;
+      min-height: 190px;
+      transition: transform 0.35s cubic-bezier(.22, 1, .36, 1), border-color 0.25s, box-shadow 0.35s;
+    }
+
+    .scene-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(6, 182, 212, 0.45);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.35), 0 0 22px rgba(6, 182, 212, 0.09);
+    }
+
+    .scene-media {
+      position: relative;
+      height: 190px;
+      overflow: hidden;
+      background: #111827;
+    }
+
+    .scene-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 20%, rgba(2, 6, 23, 0.9) 100%);
+      pointer-events: none;
+    }
+
+    .scene-img-thumb {
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(.22, 1, .36, 1), filter 0.4s;
+    }
+
+    .scene-card:hover .scene-img-thumb {
+      transform: scale(1.1);
+      filter: brightness(1.08) saturate(1.15);
+    }
+
+    .scene-details {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 34px 12px 12px;
+      transform: translateY(4px);
+      transition: transform 0.3s;
+    }
+
+    .scene-card:hover .scene-details { transform: translateY(0); }
+    .scene-prompt { color: rgba(226, 232, 240, 0.8); }
+    .scene-prompt strong { color: var(--accent-cyan); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; }
+
+    .scene-card.skeleton .scene-media,
+    .scene-card.skeleton .scene-details {
+      background: linear-gradient(100deg, rgba(255,255,255,0.04) 20%, rgba(255,255,255,0.1) 38%, rgba(255,255,255,0.04) 56%);
+      background-size: 240% 100%;
+      animation: shimmer 1.35s linear infinite;
+    }
+
+    .scene-card.skeleton .scene-media::after,
+    .scene-card.skeleton .scene-details > * { display: none; }
+
+    @keyframes shimmer { to { background-position: -240% 0; } }
+
+    .shorts-viewport {
+      position: relative;
+      isolation: isolate;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.05), transparent 28%),
+        #0f172a;
+    }
+
+    .shorts-viewport::before {
+      content: '';
+      position: absolute;
+      z-index: 5;
+      top: 7px;
+      left: 50%;
+      width: 76px;
+      height: 15px;
+      transform: translateX(-50%);
+      border-radius: 0 0 12px 12px;
+      background: #020617;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .shorts-viewport::after {
+      content: '';
+      position: absolute;
+      z-index: 4;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(112deg, rgba(255,255,255,0.13), transparent 18%, transparent 70%, rgba(255,255,255,0.04));
+      mix-blend-mode: screen;
+    }
+
+    .device-status-bar {
+      position: absolute;
+      z-index: 6;
+      top: 10px;
+      left: 13px;
+      right: 13px;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255,255,255,0.72);
+      font: 600 8px var(--font-mono);
+      letter-spacing: 0.04em;
+    }
+
+    .device-status-icons { display: flex; gap: 5px; align-items: center; }
+    .device-status-icons span { display: block; width: 10px; height: 5px; border: 1px solid currentColor; border-radius: 2px; }
+    .device-status-icons span:last-child { width: 13px; background: currentColor; }
+
+    .shorts-caption-center {
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .shorts-viewport.has-content .shorts-caption-center {
+      animation: captionIn 0.7s 0.15s both cubic-bezier(.22, 1, .36, 1);
+    }
+
+    @keyframes captionIn {
+      from { opacity: 0; transform: translateY(9px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .preview-scrubber {
+      width: 100%;
+      height: 3px;
+      margin-top: 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+
+    .preview-scrubber span {
+      display: block;
+      width: 72%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.7);
+      animation: scrubberPulse 2.6s ease-in-out infinite;
+    }
+
+    @keyframes scrubberPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    .metric-chart {
+      height: 34px;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    .metric-chart svg { width: 100%; height: 100%; overflow: visible; }
+    .metric-chart .chart-line {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 180;
+      stroke-dashoffset: 180;
+      animation: drawChart 1.2s 0.25s ease-out forwards;
+    }
+
+    .metric-chart .chart-area { opacity: 0.12; }
+
+    @keyframes drawChart { to { stroke-dashoffset: 0; } }
+
+    .completion-burst {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .completion-burst.active { opacity: 1; }
+
+    .completion-burst span {
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      width: 7px;
+      height: 14px;
+      border-radius: 2px;
+      background: var(--accent-primary);
+      box-shadow: 0 0 10px currentColor;
+      animation: burstPiece 1.25s cubic-bezier(.22, 1, .36, 1) forwards;
+    }
+
+    @keyframes burstPiece {
+      0% { opacity: 1; transform: translate(-50%, -50%) rotate(0) scale(0.4); }
+      100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(1); }
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active,
+    .preset-chip:active { transform: translateY(1px) scale(0.98); }
+
+    @media (max-width: 1100px) {
+      header { padding: 12px 18px; }
+      .niche-input-group { grid-template-columns: repeat(2, 1fr); }
+      .niche-input-group .btn-primary { width: 100%; justify-content: center; }
+      .pipeline-tracker-bar { grid-template-columns: repeat(3, 1fr); row-gap: 16px; }
+      .pipeline-tracker-bar::before,
+      .pipeline-tracker-bar::after { display: none; }
+      .operator-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 720px) {
+      header { flex-wrap: wrap; gap: 12px; }
+      .brand-title { font-size: 15px; }
+      .brand-subtitle { font-size: 9px; }
+      .view-switcher { order: 3; width: 100%; }
+      .nav-tab-btn { flex: 1; justify-content: center; padding: 8px 9px; font-size: 11px; }
+      .active-niche-badge { margin-left: auto; }
+      .app-container { padding: 14px; }
+      .niche-setup-card { padding: 18px; }
+      .niche-header-row { margin-bottom: 16px; }
+      .niche-title-box h2 { font-size: 18px; }
+      .niche-title-box p { font-size: 12px; }
+      .niche-input-group { grid-template-columns: 1fr; }
+      .pipeline-tracker-bar { padding: 14px 10px; gap: 6px; }
+      .step-icon-circle { width: 36px; height: 36px; }
+      .step-name { font-size: 10px; }
+      .step-status-tag { font-size: 9px; }
+      .operator-metrics-grid { gap: 10px; }
+      .telemetry-card { padding: 13px; }
+      .telemetry-value { font-size: 21px; }
+      .log-table-container { overflow-x: auto; }
+      .log-table { min-width: 700px; }
+      .shorts-viewport { width: 220px; height: 390px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand-container">
+      <div class="brand-logo"><i data-lucide="sparkles"></i></div>
+      <div>
+        <div class="brand-title">Agentic AI Content Studio</div>
+        <div class="brand-subtitle">YouTube Shorts Automation System</div>
+      </div>
+    </div>
+
+    <!-- Mode Switcher -->
+    <div class="view-switcher">
+      <button class="nav-tab-btn active" onclick="switchTab('owner-view')">
+        <i data-lucide="layout-dashboard"></i> Channel Studio
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('operator-view')">
+        <i data-lucide="activity"></i> Operator Logs & Telemetry
+      </button>
+    </div>
+
+    <div class="active-niche-badge" id="headerNicheBadge">
+      <span class="pulse-dot"></span>
+      <span>Niche: <span id="currentNicheLabel">Not Selected</span></span>
+    </div>
+  </header>
+
+  <div class="completion-burst" id="completionBurst" aria-hidden="true"></div>
+
+  <div class="app-container">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: CHANNEL STUDIO (USER / CHANNEL OWNER VIEW) -->
+    <!-- ========================================== -->
+    <div id="owner-view" class="tab-content active">
+
+      <!-- NICHE SETUP CARD (maps to 'channels' table) -->
+      <div class="niche-setup-card">
+        <div class="niche-header-row">
+          <div class="niche-title-box">
+            <h2><i data-lucide="target" style="color: var(--accent-purple);"></i> Channel Niche & Execution Setup</h2>
+            <p>Input your YouTube Channel Niche. The system will automatically trigger the agentic pipeline to select topics, generate scripts, synthesize audio, create AI visuals, and upload the final Shorts video.</p>
+          </div>
+        </div>
+
+        <div class="niche-input-group">
+          <!-- channels.niche -->
+          <div class="input-field-wrapper">
+            <label><i data-lucide="sparkles"></i> Channel Niche</label>
+            <input type="text" id="nicheInput" class="custom-input" placeholder="e.g. AI Tech Innovations & Future Robotics" value="">
+          </div>
+
+          <!-- channels.owner_email / notify_email -->
+          <div class="input-field-wrapper">
+            <label><i data-lucide="mail"></i> Owner Email <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(notification sent here after run)</span></label>
+            <input type="email" id="ownerEmailInput" class="custom-input" placeholder="e.g. creator@example.com" value="">
+            <div id="emailNotifStatus" style="margin-top:6px;font-size:12px;color:var(--text-muted);min-height:18px;font-family:var(--font-mono);"></div>
+          </div>
+
+          <!-- TTS Engine Selector -->
+          <div class="input-field-wrapper">
+            <label><i data-lucide="mic"></i> Voice Engine</label>
+            <select id="ttsProviderSelect" class="select-input custom-input">
+              <option value="EdgeTTS">EdgeTTS (Default)</option>
+              <option value="ElevenLabs">ElevenLabs (Fallback)</option>
+            </select>
+          </div>
+
+          <!-- Image Engine Selector -->
+          <div class="input-field-wrapper">
+            <label><i data-lucide="image"></i> Image Engine</label>
+            <select id="imageProviderSelect" class="select-input custom-input">
+              <option value="SDXL">SDXL</option>
+              <option value="Leonardo AI">Leonardo AI (Premium)</option>
+            </select>
+          </div>
+
+          <!-- Trigger Autonomous Pipeline Run -->
+          <button class="btn-primary" onclick="triggerPipelineRun()">
+            <i data-lucide="play-circle"></i> Launch Autonomous Run
+          </button>
+        </div>
+
+        <!-- Quick Niche Presets -->
+        <div class="niche-presets-row">
+          <span class="preset-label">Quick Channel Presets:</span>
+          <span class="preset-chip" onclick="setNiche('Dark History & Unsolved Mysteries')">📜 Dark History & Mysteries</span>
+          <span class="preset-chip" onclick="setNiche('Space Exploration & Astrophysics')">🚀 Space & Astrophysics</span>
+          <span class="preset-chip" onclick="setNiche('Personal Finance & Crypto Wealth')">💰 Personal Finance & Wealth</span>
+          <span class="preset-chip" onclick="setNiche('Cybersecurity & Hacking Lore')">⚡ Cybersecurity & Hacking</span>
+          <span class="preset-chip" onclick="setNiche('Daily Fitness & Health Tips')">🔥 Daily Fitness & Health</span>
+        </div>
+      </div>
+
+      <!-- PIPELINE PROGRESS TRACKER BAR -->
+      <div class="pipeline-tracker-bar">
+        <div class="pipeline-stage-step" id="step-topic">
+          <div class="step-icon-circle"><i data-lucide="lightbulb"></i></div>
+          <div class="step-name">1. Topic Agent</div>
+          <div class="step-status-tag" id="status-topic">Idle</div>
+        </div>
+
+        <div class="pipeline-stage-step" id="step-script">
+          <div class="step-icon-circle"><i data-lucide="file-text"></i></div>
+          <div class="step-name">2. Script Agent</div>
+          <div class="step-status-tag" id="status-script">Idle</div>
+        </div>
+
+        <div class="pipeline-stage-step" id="step-tts">
+          <div class="step-icon-circle"><i data-lucide="volume-2"></i></div>
+          <div class="step-name">3. Voice TTS</div>
+          <div class="step-status-tag" id="status-tts">Idle</div>
+        </div>
+
+        <div class="pipeline-stage-step" id="step-image">
+          <div class="step-icon-circle"><i data-lucide="image"></i></div>
+          <div class="step-name">4. Vision AI</div>
+          <div class="step-status-tag" id="status-image">Idle</div>
+        </div>
+
+        <div class="pipeline-stage-step" id="step-render">
+          <div class="step-icon-circle"><i data-lucide="film"></i></div>
+          <div class="step-name">5. Video Render</div>
+          <div class="step-status-tag" id="status-render">Idle</div>
+        </div>
+
+        <div class="pipeline-stage-step" id="step-publish">
+          <div class="step-icon-circle"><i data-lucide="youtube"></i></div>
+          <div class="step-name">6. YouTube Upload</div>
+          <div class="step-status-tag" id="status-publish">Idle</div>
+        </div>
+      </div>
+
+      <!-- STUDIO WORKSPACE -->
+      <div class="studio-grid">
+
+        <!-- LEFT COLUMN: GENERATED ARTIFACT CARDS -->
+        <div class="cards-stack">
+
+          <!-- TOPIC CARD (maps to 'topics' table) -->
+          <div class="artifact-card">
+            <div class="card-header-bar">
+              <div class="card-title-group">
+                <i data-lucide="sparkles" style="color: var(--accent-purple);"></i>
+                <h3>Topic Selection & Trend Analysis</h3>
+              </div>
+              <span class="status-badge pending" id="topicBadge"><i data-lucide="clock"></i> Pending</span>
+            </div>
+
+            <div class="topic-display-box">
+              <div class="topic-title" id="displayTopicTitle">No topic selected yet</div>
+              <div class="topic-meta-row">
+                <span><i data-lucide="trending-up" style="color: var(--accent-primary);"></i> Trend Score: <span id="displayTrendScore">--</span></span>
+                <span><i data-lucide="clock"></i> Content Duration: <span id="displayDuration">--</span></span>
+                <span><i data-lucide="key"></i> topic_id: <code id="displayTopicId">--</code></span>
+              </div>
+            </div>
+
+            <div class="justification-quote" id="displayJustification">
+              "Awaiting pipeline execution to analyze niche trends and select target topic."
+            </div>
+          </div>
+
+          <!-- SCRIPT CARD (maps to 'scripts' table) -->
+          <div class="artifact-card">
+            <div class="card-header-bar">
+              <div class="card-title-group">
+                <i data-lucide="file-text" style="color: var(--accent-cyan);"></i>
+                <h3>Generated Narration Script</h3>
+              </div>
+              <span class="status-badge pending" id="scriptBadge"><i data-lucide="clock"></i> Pending</span>
+            </div>
+
+            <div class="script-content-box" id="displayScriptText">No narration script generated yet. Launch pipeline to generate script.</div>
+
+            <div class="script-metrics-bar">
+              <div class="metric-chip"><i data-lucide="layers"></i> Script Version: <span id="scriptVersion">--</span></div>
+              <div class="metric-chip"><i data-lucide="hash"></i> Word Count: <span id="scriptWordCount">0</span> words</div>
+              <div class="metric-chip"><i data-lucide="book-open"></i> Readability Metric: <span id="displayReadability">--</span></div>
+            </div>
+          </div>
+
+          <!-- SCENE IMAGES CARD (maps to 'scenes' & 'image_assets' tables) -->
+          <div class="artifact-card">
+            <div class="card-header-bar">
+              <div class="card-title-group">
+                <i data-lucide="image" style="color: var(--accent-primary);"></i>
+                <h3>Scene Prompts & AI Image Assets</h3>
+              </div>
+              <span class="status-badge pending" id="imageBadge"><i data-lucide="clock"></i> Pending</span>
+            </div>
+
+            <div class="scene-grid" id="sceneGridContainer">
+              <div class="empty-placeholder-box">
+                <i data-lucide="image" style="width: 32px; height: 32px; opacity: 0.5;"></i>
+                <div class="empty-eyebrow">Vision workspace standing by</div>
+                <div>No visual scenes yet — launch a run to generate your storyboard.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- YOUTUBE UPLOAD CARD (maps to 'uploads' table) -->
+          <div class="artifact-card">
+            <div class="card-header-bar">
+              <div class="card-title-group">
+                <i data-lucide="youtube" style="color: #ef4444;"></i>
+                <h3>YouTube Automation Record</h3>
+              </div>
+              <span class="status-badge pending" id="uploadBadge"><i data-lucide="clock"></i> Pending</span>
+            </div>
+
+            <div style="background: rgba(15,23,42,0.6); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; font-size: 15px; color: var(--text-muted); margin-bottom: 6px; font-style: italic;" id="publishedTitle">
+                No video published yet.
+              </div>
+              <div style="display: flex; gap: 12px; font-family: var(--font-mono); font-size: 11px; margin-top: 8px;">
+                <span>youtube_video_id: <code id="displayYtVideoId">--</code></span>
+                <span>published_url: <span id="displayYtUrl" style="color: var(--text-muted);">--</span></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: VIDEO RENDER PREVIEW (maps to 'videos' & 'narration_audio') -->
+        <div class="preview-panel">
+
+          <div class="video-mockup-card">
+            <div style="font-weight: 700; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; font-family: var(--font-mono); display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <span><i data-lucide="film"></i> Rendered Shorts Video</span>
+              <span style="font-size: 10px; color: var(--text-muted);" id="captionStatusBadge">Awaiting Render</span>
+            </div>
+
+            <div class="shorts-viewport">
+              <video class="shorts-bg-image" id="previewVideoBg" controls playsinline preload="metadata"></video>
+              
+              <div class="shorts-empty-state" id="previewEmptyState">
+                <i data-lucide="film"></i>
+                <div style="font-size: 12px;">Video preview will appear here after rendering</div>
+              </div>
+
+              <div class="shorts-overlay-content">
+                <div class="device-status-bar">
+                  <span>9:41</span>
+                  <span class="device-status-icons"><span></span><span></span><span></span></span>
+                </div>
+                <div class="shorts-top-bar" style="display: flex; justify-content: space-between; align-items: center;">
+                  <span class="live-badge" id="previewLiveBadge">OFFLINE</span>
+                  <span style="font-family: var(--font-mono); font-size: 10px; color: #fff; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px;" id="previewDurationTag">-- / --</span>
+                </div>
+
+                <div class="shorts-caption-center">
+                  <div class="burned-caption-text" id="previewCaptionText">NO CAPTIONS RENDERED YET</div>
+                </div>
+
+                <div class="shorts-bottom-meta" style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: var(--text-muted);" id="channelAvatar">AI</div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 12px;" id="previewChannelHandle">@yourchannel</div>
+                    <div style="font-size: 9px; opacity: 0.8; color: var(--text-muted);" id="previewUploadStatus">Pending Execution</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="preview-scrubber" aria-label="Video preview progress"><span></span></div>
+
+            <!-- TTS Voice Details -->
+            <div style="width: 100%; margin-top: 16px; background: rgba(15,23,42,0.8); border: 1px solid var(--border-color); padding: 12px; border-radius: var(--radius-md);">
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 6px;">
+                <span>Voice Audio (narration_audio)</span>
+                <span id="displayAudioDuration">duration_sec: --</span>
+              </div>
+              <div style="font-size: 11px; color: var(--text-secondary); font-family: var(--font-mono);" id="displayAudioProvider">Provider: --</div>
+            </div>
+          </div>
+
+          <!-- pipeline_runs Execution Fact Box -->
+          <div class="telemetry-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div class="telemetry-label"><i data-lucide="bar-chart-2"></i> Current Run Execution Summary</div>
+              <span class="status-badge pending" id="runStatusBadge">Idle</span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+              <div>
+                <div style="font-size: 10px; color: var(--text-muted);">Wall-Clock Time</div>
+                <div style="font-size: 18px; font-weight: 700; color: var(--accent-cyan);" id="runWallClock">--</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; color: var(--text-muted);">API Run Cost</div>
+                <div style="font-size: 18px; font-weight: 700; color: var(--accent-primary);" id="runCost">$0.00</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; color: var(--text-muted);">Quality Rating</div>
+                <div style="font-size: 18px; font-weight: 700; color: var(--accent-purple);" id="runQuality">--</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: OPERATOR LOGS (retry_logs & cost_logs) -->
+    <!-- ========================================== -->
+    <div id="operator-view" class="tab-content">
+      <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 6px;">System Operator Telemetry & Logs</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">Audit trail for agent retries, provider fallback charges, and quality evaluation ratings across execution runs.</p>
+      </div>
+
+      <div class="operator-metrics-grid">
+        <div class="telemetry-card">
+          <div class="telemetry-label">Total Pipeline Runs</div>
+          <div class="telemetry-value purple" id="totalRunsCount">0</div>
+          <div class="telemetry-subtext">Active Database Runs</div>
+          <div class="metric-chart" style="color: var(--accent-purple);">
+            <svg viewBox="0 0 180 34" role="img" aria-label="Pipeline runs trend">
+              <path class="chart-area" fill="currentColor" d="M0 30 L0 25 L22 26 L45 18 L67 22 L90 12 L113 16 L136 8 L158 11 L180 3 L180 30 Z"></path>
+              <path class="chart-line" d="M0 25 L22 26 L45 18 L67 22 L90 12 L113 16 L136 8 L158 11 L180 3"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="telemetry-card">
+          <div class="telemetry-label">Stage Retries Triggered</div>
+          <div class="telemetry-value amber" id="totalRetriesCount">0</div>
+          <div class="telemetry-subtext">Auto-recovered via retry policy</div>
+          <div class="metric-chart" style="color: var(--accent-warning);">
+            <svg viewBox="0 0 180 34" role="img" aria-label="Retry trend">
+              <path class="chart-area" fill="currentColor" d="M0 30 L0 10 L22 14 L45 12 L67 22 L90 16 L113 24 L136 18 L158 26 L180 23 L180 30 Z"></path>
+              <path class="chart-line" d="M0 10 L22 14 L45 12 L67 22 L90 16 L113 24 L136 18 L158 26 L180 23"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="telemetry-card">
+          <div class="telemetry-label">Total Provider Cost</div>
+          <div class="telemetry-value accent" id="totalCostValue">$0.00</div>
+          <div class="telemetry-subtext">Sum of cost_logs</div>
+          <div class="metric-chart" style="color: var(--accent-primary);">
+            <svg viewBox="0 0 180 34" role="img" aria-label="Provider cost trend">
+              <path class="chart-area" fill="currentColor" d="M0 30 L0 27 L22 22 L45 24 L67 18 L90 20 L113 13 L136 16 L158 8 L180 5 L180 30 Z"></path>
+              <path class="chart-line" d="M0 27 L22 22 L45 24 L67 18 L90 20 L113 13 L136 16 L158 8 L180 5"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="telemetry-card">
+          <div class="telemetry-label">Avg Quality Score</div>
+          <div class="telemetry-value" id="avgQualityScore">--</div>
+          <div class="telemetry-subtext">Independent quality ratings</div>
+          <div class="metric-chart" style="color: var(--accent-cyan);">
+            <svg viewBox="0 0 180 34" role="img" aria-label="Quality score trend">
+              <path class="chart-area" fill="currentColor" d="M0 30 L0 24 L22 21 L45 22 L67 15 L90 17 L113 11 L136 14 L158 7 L180 8 L180 30 Z"></path>
+              <path class="chart-line" d="M0 24 L22 21 L45 22 L67 15 L90 17 L113 11 L136 14 L158 7 L180 8"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- retry_logs TABLE -->
+      <div class="log-table-container" style="margin-bottom: 24px;">
+        <div style="padding: 16px; background: rgba(15,23,42,0.9); font-weight: 700; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+          <span><i data-lucide="refresh-cw"></i> Stage Retry Audit Trail (retry_logs)</span>
+        </div>
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th>retry_id</th>
+              <th>run_id</th>
+              <th>stage_name</th>
+              <th>attempt_number</th>
+              <th>reason</th>
+              <th>logged_at</th>
+            </tr>
+          </thead>
+          <tbody id="retryLogsTableBody">
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">No retry logs recorded yet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- cost_logs TABLE -->
+      <div class="log-table-container">
+        <div style="padding: 16px; background: rgba(15,23,42,0.9); font-weight: 700; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+          <span><i data-lucide="dollar-sign"></i> API Cost Ledger (cost_logs)</span>
+        </div>
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th>cost_id</th>
+              <th>run_id</th>
+              <th>provider</th>
+              <th>amount</th>
+              <th>unit</th>
+            </tr>
+          </thead>
+          <tbody id="costLogsTableBody">
+            <tr>
+              <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">No cost records recorded yet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BACKEND INTEGRATION SCRIPT & API HOOKS -->
+  <script>
+    lucide.createIcons();
+
+    /* ======================================================
+       BACKEND AUTOMATION SYSTEM INTEGRATION GUIDELINES:
+       ------------------------------------------------------
+       1. Connect your Python (FastAPI/Flask/Celery) or Node.js
+          backend server by setting API_BASE_URL below.
+       2. When user submits a Niche, call API endpoint:
+          POST /api/pipeline/run
+          Payload: { niche, owner_email, tts_provider, image_provider }
+       3. Backend inserts records into 'channels' & 'pipeline_runs',
+          starts orchestrator, and streams updates via WebSocket or polling GET /api/runs/:run_id
+    ====================================================== */
+    
+    const API_BASE_URL = "http://localhost:8000/api"; // Connect your Python/FastAPI server here
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      
+      const indexMap = { 'owner-view': 0, 'operator-view': 1 };
+      document.querySelectorAll('.nav-tab-btn')[indexMap[tabId]].classList.add('active');
+    }
+
+    // Point this at your n8n webhook (Webhook Trigger node -> path: youtube-automation-run).
+    // Use the /webhook-test/ URL while testing in the n8n editor, and the
+    // /webhook/ URL once the workflow is Activated.
+    const CONFIG = {
+      N8N_WEBHOOK_URL: "http://127.0.0.1:8000/webhook/youtube-automation-run"
+    };
+
+    function setNiche(nicheName) {
+      document.getElementById('nicheInput').value = nicheName;
+      document.getElementById('currentNicheLabel').innerText = nicheName;
+      document.getElementById('headerNicheBadge').classList.add('active');
+    }
+
+    function updatePipelineRail(completedStages) {
+      const tracker = document.querySelector('.pipeline-tracker-bar');
+      if (!tracker) return;
+      const maxCompleted = 5; // six nodes create five connecting segments
+      const progress = Math.min(100, (completedStages / maxCompleted) * 100);
+      tracker.style.setProperty('--rail-progress', `${progress}%`);
+    }
+
+    function showSceneLoadingState() {
+      const sceneGrid = document.getElementById('sceneGridContainer');
+      sceneGrid.innerHTML = [1, 2, 3].map(() => `
+        <div class="scene-card skeleton" aria-label="Generating visual scene">
+          <div class="scene-media"></div>
+          <div class="scene-details"><div class="scene-prompt">&nbsp;</div></div>
+        </div>
+      `).join('');
+    }
+
+    function revealGeneratedCards() {
+      document.querySelectorAll('.cards-stack > .artifact-card').forEach((card, index) => {
+        card.classList.remove('reveal');
+        setTimeout(() => card.classList.add('reveal'), index * 110);
+      });
+    }
+
+    function fireCompletionBurst() {
+      const burst = document.getElementById('completionBurst');
+      if (!burst) return;
+      const colors = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b', '#ffffff'];
+      burst.innerHTML = Array.from({ length: 26 }, (_, index) => {
+        const angle = (index / 26) * Math.PI * 2;
+        const distance = 120 + (index % 5) * 24;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+        const rotation = (index % 2 ? 1 : -1) * (90 + index * 11);
+        return `<span style="color:${colors[index % colors.length]}; background:${colors[index % colors.length]}; --x:${x}px; --y:${y}px; --r:${rotation}deg;"></span>`;
+      }).join('');
+      burst.classList.remove('active');
+      void burst.offsetWidth;
+      burst.classList.add('active');
+      setTimeout(() => {
+        burst.classList.remove('active');
+        burst.innerHTML = '';
+      }, 1400);
+    }
+
+    // Trigger Autonomous Pipeline Execution - calls the real n8n webhook.
+    // The n8n run is synchronous (Respond to Webhook fires only once the
+    // whole pipeline finishes), so we can't get true per-node progress from
+    // the browser. We animate the stepper on a loop as a "still working"
+    // indicator, then snap everything to completed once the response lands.
+    const STEPS = ['topic', 'script', 'tts', 'image', 'render', 'publish'];
+    let stepperTimer = null;
+
+    function resetStepper() {
+      STEPS.forEach(s => {
+        const step = document.getElementById(`step-${s}`);
+        step.className = 'pipeline-stage-step';
+        step.style.removeProperty('--accent-primary');
+        document.getElementById(`status-${s}`).innerText = 'Queued';
+      });
+      updatePipelineRail(0);
+    }
+
+    function startStepperAnimation() {
+      let currentStep = 0;
+      resetStepper();
+      stepperTimer = setInterval(() => {
+        const prevKey = STEPS[(currentStep - 1 + STEPS.length) % STEPS.length];
+        const prevStep = document.getElementById(`step-${prevKey}`);
+        if (prevStep.classList.contains('active')) {
+          prevStep.className = 'pipeline-stage-step completed';
+          document.getElementById(`status-${prevKey}`).innerText = 'Done';
+        }
+        const stepKey = STEPS[currentStep % STEPS.length];
+        document.getElementById(`step-${stepKey}`).className = 'pipeline-stage-step active';
+        document.getElementById(`status-${stepKey}`).innerText = 'Running';
+        updatePipelineRail(Math.min(currentStep, 5));
+        currentStep++;
+      }, 1800); // roughly matches how long each real stage tends to take
+    }
+
+    function finishStepperAnimation(success) {
+      clearInterval(stepperTimer);
+      STEPS.forEach(s => {
+        const step = document.getElementById(`step-${s}`);
+        step.className = success ? 'pipeline-stage-step completed' : 'pipeline-stage-step';
+        document.getElementById(`status-${s}`).innerText = success ? 'Done' : 'Idle';
+      });
+      updatePipelineRail(success ? 5 : 0);
+    }
+
+    function showRunError(message) {
+      finishStepperAnimation(false);
+      document.getElementById('runStatusBadge').className = 'status-badge warning';
+      document.getElementById('runStatusBadge').innerText = 'Failed';
+      document.getElementById('previewUploadStatus').innerText = message;
+      // Also update the YouTube publish card to show the error
+      document.getElementById('displayYtVideoId').innerText = 'FAILED';
+      document.getElementById('displayYtUrl').innerHTML =
+        `<span style="color:var(--accent-danger);font-size:12px;word-break:break-word;">${message}</span>`;
+      document.getElementById('uploadBadge').className = 'status-badge warning';
+      document.getElementById('uploadBadge').innerHTML = `<i data-lucide="alert-triangle"></i> Upload Failed`;
+      const launchBtn = document.querySelector('.btn-primary');
+      launchBtn.innerHTML = `<i data-lucide="play-circle"></i> Launch Autonomous Run`;
+      launchBtn.disabled = false;
+      lucide.createIcons();
+    }
+
+    async function triggerPipelineRun() {
+      const nicheInput = document.getElementById('nicheInput').value.trim();
+      const niche = nicheInput || "AI Tech Innovations";
+      const ownerEmail = document.getElementById('ownerEmailInput').value.trim();
+      const ttsProvider = document.getElementById('ttsProviderSelect').value;
+      const imageProvider = document.getElementById('imageProviderSelect').value;
+
+      document.getElementById('currentNicheLabel').innerText = niche;
+      document.getElementById('headerNicheBadge').classList.add('active');
+
+      const launchBtn = document.querySelector('.btn-primary');
+      launchBtn.disabled = true;
+      launchBtn.innerHTML = `<i data-lucide="loader" class="spin"></i> Running Agentic Pipeline...`;
+      lucide.createIcons();
+
+      showSceneLoadingState();
+      document.getElementById('runStatusBadge').className = 'status-badge warning';
+      document.getElementById('runStatusBadge').innerText = 'Running';
+      document.getElementById('previewUploadStatus').innerText = 'Pipeline in progress...';
+
+      startStepperAnimation();
+
+      // Clear any previous email status
+      const emailStatusEl = document.getElementById('emailNotifStatus');
+      if (emailStatusEl) emailStatusEl.textContent = '';
+
+      try {
+        const response = await fetch(CONFIG.N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          // notify_email re-uses the existing ownerEmailInput -- no new element needed
+          body: JSON.stringify({ niche, ownerEmail, ttsProvider, imageProvider, notify_email: ownerEmail || null }),
+        });
+
+        if (!response.ok) {
+          let detail = `Server returned HTTP ${response.status}`;
+          try {
+            const errJson = await response.json();
+            if (errJson.detail) detail = errJson.detail;
+          } catch (_) {}
+          const e = new Error(detail);
+          e._serverDetail = detail;
+          throw e;
+        }
+        const data = await response.json();
+
+        finishStepperAnimation(true);
+        launchBtn.innerHTML = `<i data-lucide="play-circle"></i> Launch Autonomous Run`;
+        launchBtn.disabled = false;
+        lucide.createIcons();
+
+        populateGeneratedContent(data);
+        fireCompletionBurst();
+
+        // Show email notification status beneath the email input
+        const notifEl = document.getElementById('emailNotifStatus');
+        if (notifEl) {
+          const meta = data.meta || {};
+          if (meta.emailQueued && meta.notifyEmail) {
+            // Show "sending" immediately, then poll for the real result
+            notifEl.innerHTML = `<span style="color:var(--text-muted);">&#9654; Sending notification to ${meta.notifyEmail}&#8230;</span>`;
+            (async function pollEmailStatus(runId, toEmail) {
+              const API_EMAIL = 'http://127.0.0.1:8000/api/email-reports';
+              const INTERVAL_MS = 2000;
+              const MAX_TICKS  = 15; // 15 × 2 s = 30 s ceiling
+              for (let tick = 0; tick < MAX_TICKS; tick++) {
+                await new Promise(r => setTimeout(r, INTERVAL_MS));
+                try {
+                  const res  = await fetch(`${API_EMAIL}?run_id=${encodeURIComponent(runId)}`);
+                  if (!res.ok) continue;
+                  const json = await res.json();
+                  const row  = (json.reports || [])[0]; // most-recent row for this run
+                  if (!row) continue;
+                  if (row.email_status === 'SENT') {
+                    notifEl.innerHTML = `<span style="color:#10b981;">&#10003; Notification sent to ${toEmail}</span>`;
+                    return;
+                  }
+                  if (row.email_status === 'FAILED') {
+                    notifEl.innerHTML = `<span style="color:var(--accent-warning);">Email failed &mdash; see Retry Audit panel.</span>`;
+                    return;
+                  }
+                  // status still pending — keep polling
+                } catch (_) { /* network blip — keep polling */ }
+              }
+              // 30 s elapsed with no conclusive row — show generic fallback
+              notifEl.innerHTML = `<span style="color:var(--text-muted);">Notification status unknown &mdash; check Retry Audit panel.</span>`;
+            })(data.runId, meta.notifyEmail);
+          } else if (!meta.notifyEmail) {
+            notifEl.innerHTML = `<span style="color:var(--text-muted);">No email entered &mdash; notification skipped.</span>`;
+          }
+        }
+      } catch (err) {
+        console.error('Pipeline run failed:', err);
+        // Try to extract the FastAPI error detail from the response body
+        let errMsg = 'Pipeline failed';
+        if (err._serverDetail) {
+          errMsg = err._serverDetail;
+        } else if (err.message) {
+          errMsg = err.message;
+        }
+        showRunError(errMsg);
+        const notifEl = document.getElementById('emailNotifStatus');
+        if (notifEl && ownerEmail) notifEl.innerHTML = `<span style="color:var(--accent-warning);">Email failed &mdash; see Retry Audit panel.</span>`;
+      }
+    }
+
+    // Running totals across runs in this browser session (operator logs tab).
+    let sessionRunCount = 0;
+    let sessionCostTotal = 0;
+
+    // data is the JSON payload from the n8n "Respond to Webhook" node - see
+    // the Build Response code node in the workflow for its exact shape.
+    function populateGeneratedContent(data) {
+      const niche = data.niche || document.getElementById('nicheInput').value.trim();
+      const ttsProvider = document.getElementById('ttsProviderSelect').value;
+      const imageProvider = document.getElementById('imageProviderSelect').value;
+
+      const topic = data.topic || "Untitled topic";
+      const script = data.script || {};
+      const narration = script.narration || "";
+      const title = script.title || "Untitled Short";
+      const images = Array.isArray(data.images) ? data.images : [];
+      const video = data.video || {};
+      const youtube = data.youtube || {};
+      const meta = data.meta || {};
+
+      // Topic Card
+      document.getElementById('displayTopicTitle').innerText = topic;
+      document.getElementById('displayTopicTitle').classList.add('has-content');
+      document.getElementById('displayTrendScore').innerText = "--";
+      document.getElementById('displayDuration').innerText = "~30s";
+      document.getElementById('displayTopicId').innerText = data.runId || "--";
+      document.getElementById('displayJustification').innerText =
+        `Niche: ${niche}. Picked by TopicAgent (Gemini) from the daily niche input.`;
+      document.getElementById('displayJustification').classList.add('has-content');
+      document.getElementById('topicBadge').className = "status-badge success";
+      document.getElementById('topicBadge').innerHTML = `<i data-lucide="check"></i> Topic Selected`;
+
+      // Script Card
+      document.getElementById('displayScriptText').innerText = narration || "No narration returned.";
+      document.getElementById('displayScriptText').classList.add('has-content');
+      document.getElementById('scriptVersion').innerText = "1";
+      document.getElementById('scriptWordCount').innerText = narration ? narration.split(/\s+/).length : 0;
+      document.getElementById('displayReadability').innerText = "--"; // not scored by the current pipeline
+      document.getElementById('scriptBadge').className = "status-badge success";
+      document.getElementById('scriptBadge').innerHTML = `<i data-lucide="shield-check"></i> Script Generated`;
+
+      // Image Scenes Grid - ImageAgent currently produces one scene image per run.
+      const sceneGrid = document.getElementById('sceneGridContainer');
+      sceneGrid.innerHTML = images.length
+        ? images.map((img, i) => `
+          <div class="scene-card">
+            <div class="scene-media">
+              <img src="${img.url}" alt="Scene ${i + 1}" class="scene-img-thumb">
+              <div class="scene-number-badge">SCENE ${i + 1} (seq: ${i + 1})</div>
+            </div>
+            <div class="scene-details">
+              <div class="scene-prompt"><strong>Prompt:</strong> ${img.prompt || ''}</div>
+            </div>
+          </div>
+        `).join('')
+        : `<div class="scene-card"><div class="scene-details"><div class="scene-prompt">No image returned.</div></div></div>`;
+      document.getElementById('imageBadge').className = "status-badge success";
+      document.getElementById('imageBadge').innerHTML = `<i data-lucide="check-circle"></i> Provider: ${imageProvider}`;
+
+      // Upload Card
+      document.getElementById('publishedTitle').innerText = title;
+      document.getElementById('publishedTitle').style.color = "#ffffff";
+      document.getElementById('publishedTitle').style.fontStyle = "normal";
+      document.getElementById('displayYtVideoId').innerText = youtube.videoId || "--";
+      document.getElementById('displayYtUrl').innerHTML = youtube.url
+        ? `<a href="${youtube.url}" target="_blank" style="color: #38bdf8; text-decoration: underline;">${youtube.url}</a>`
+        : "--";
+      document.getElementById('uploadBadge').className = "status-badge success";
+      document.getElementById('uploadBadge').innerHTML = `<i data-lucide="globe"></i> Published to YouTube`;
+
+      // Video Preview Panel - Shotstack's render URL is the actual output video,
+      // shown here as a background poster since this card doesn't have a <video> tag.
+      const previewBg = document.getElementById('previewVideoBg');
+      if (images[0]) previewBg.setAttribute('poster', images[0].url);
+      if (video.url) {
+        previewBg.src = video.url;
+        previewBg.load();
+      }
+      previewBg.classList.add('has-content');
+      document.querySelector('.shorts-viewport').classList.add('has-content');
+      document.getElementById('previewEmptyState').style.display = "none";
+      document.getElementById('previewLiveBadge').className = "live-badge rendered";
+      document.getElementById('previewLiveBadge').innerText = "RENDERED SHORTS";
+      document.getElementById('previewDurationTag').innerText = video.url ? "Rendered" : "--";
+      document.getElementById('previewCaptionText').innerText = title;
+      document.getElementById('previewCaptionText').classList.add('has-content');
+      document.getElementById('previewChannelHandle').innerText = "@" + niche.replace(/\s+/g, '');
+      document.getElementById('previewUploadStatus').innerText = video.url
+        ? "Auto-Published by System"
+        : "Render did not complete";
+      document.getElementById('displayAudioDuration').innerText = "duration_sec: --";
+      document.getElementById('displayAudioProvider').innerText = `Provider: ${ttsProvider}`;
+
+      // Fact Summary & Telemetry (from the workflow's Build Response node)
+      document.getElementById('runStatusBadge').className = "status-badge success";
+      document.getElementById('runStatusBadge').innerText = "Completed";
+      document.getElementById('runWallClock').innerText = meta.wallClockSec != null ? `${meta.wallClockSec}s` : "--";
+      document.getElementById('runCost').innerText = meta.estimatedCostUsd != null ? `$${meta.estimatedCostUsd}` : "--";
+      document.getElementById('runQuality').innerText = "N/A"; // no QC agent in the pipeline yet
+
+      // Update Operator Logs Tab (session-local running totals)
+      sessionRunCount += 1;
+      sessionCostTotal += Number(meta.estimatedCostUsd || 0);
+      document.getElementById('totalRunsCount').innerText = String(sessionRunCount);
+      document.getElementById('totalCostValue').innerText = `$${sessionCostTotal.toFixed(4)}`;
+      document.getElementById('avgQualityScore').innerText = "N/A";
+      revealGeneratedCards();
+
+      document.getElementById('costLogsTableBody').innerHTML += `
+        <tr>
+          <td><code>${data.runId || '--'}</code></td>
+          <td><code>${data.runId || '--'}</code></td>
+          <td>${imageProvider} + ${ttsProvider} + Shotstack</td>
+          <td>$${(meta.estimatedCostUsd || 0).toFixed(4)}</td>
+          <td>USD</td>
+        </tr>
+      `;
+
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
